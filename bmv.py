@@ -105,10 +105,56 @@ def doc_creator(fecha, mes, title, subtitle, dict):
         tabla.rows[n].cells[0].text = str(n)
         tabla.rows[n].cells[1].text = list(dict.keys())[n - 1]
         tabla.rows[n].cells[2].text = dict[list(dict.keys())[n - 1]][0]
-    documento.save("test.docx")
+    documento.save("Reporte_EV_BMV.docx")
 
-def doc_updater():
-    pass
+def doc_updater(resultados):
+    try:
+        doc = Document('Reporte_EV_BMV.docx')
+    except Exception as e:
+        print("Es necesario generar primero el documento y tenerlo en el mismo directorio desde el que se ejecuta.")
+        print(e)
+        exit()
+    tabla = doc.tables[0]
+    doc_cleaner(tabla)
+    count = 0
+    for elemento in resultados:
+        count += 1
+        for empresa in elemento:
+            formateo_eventos(tabla.cell(count, 3), elemento, empresa)
+    doc.save('Reporte_EV_BMV.docx')
+
+def doc_cleaner(tabla):
+    for cell in range(1, tabla.nrows):
+        tabla.cell(cell, 3).text = ""
+
+def formateo_eventos(cell, elemento, empresa):
+    if len(elemento[empresa]) == 3:
+        texto = cell.add_paragraph()
+        texto.add_run("Evento: ").bold = True
+        texto.add_run(elemento[empresa][1])
+        texto.add_run("\nFecha: ").bold = True
+        texto.add_run(elemento[empresa][0])
+        texto.add_run("\nLinks: ").bold = True
+        for l in elemento[empresa][2]:
+            texto.add_run("\n" + l)
+    elif len(elemento[empresa]) > 3:
+        for n in range(0, len(elemento[empresa]) + 1, 3):
+            texto = cell.add_paragraph()
+            texto.add_run("Evento: ").bold = True
+            texto.add_run(elemento[empresa][n - 2])
+            texto.add_run("\nFecha: ").bold = True
+            texto.add_run(elemento[empresa][n -3])
+            texto.add_run("\nLinks: ").bold = True
+            for l in elemento[empresa][n -1]:
+                texto.add_run("\n" + l)
+            texto.add_run("\n")
+    elif len(elemento[empresa]) == 0:
+        cell.add_paragraph("Sin publicaciones.")
+    else:
+        cell.add_paragraph("Error, favor de verificar manualmente.")
+
+
+
 
 def loop_events(tables, number):
     busqueda = {}
@@ -220,9 +266,18 @@ if __name__ == "__main__":
         checker_link_ER()
         new_dict = extractorXls()
         resultados = searcher(new_dict, fecha)
-        print(resultados)
     else:
         print("Favor de solo seleccionar (s / n).")
         exit()
-    doc_creator(fecha, mes, titulo, subtitulo, new_dict)
+    dec_EV = input("¿Generar nuevo documento? (s/n): ")
+    while True:
+        if dec_EVREL.strip().lower() == "s":
+            doc_creator(fecha, mes, titulo, subtitulo, new_dict)
+            doc_updater(resultados)
+            break
+        elif dec_EVREL.strip().lower() == "n":
+            doc_updater(resultados)
+            break
+        else:
+            print("Favor de solo responder s/n.")
 
