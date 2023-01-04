@@ -124,7 +124,7 @@ def doc_updater(resultados):
     doc.save('Reporte_EV_BMV.docx')
 
 def doc_cleaner(tabla):
-    for cell in range(1, tabla.nrows):
+    for cell in range(1, len(tabla.rows)):
         tabla.cell(cell, 3).text = ""
 
 def formateo_eventos(cell, elemento, empresa):
@@ -136,7 +136,7 @@ def formateo_eventos(cell, elemento, empresa):
         texto.add_run(elemento[empresa][0])
         texto.add_run("\nLinks: ").bold = True
         for l in elemento[empresa][2]:
-            texto.add_run("\n" + l)
+            texto.add_run("\n" + "https://www.bmv.com.mx" + l)
     elif len(elemento[empresa]) > 3:
         for n in range(0, len(elemento[empresa]) + 1, 3):
             texto = cell.add_paragraph()
@@ -146,7 +146,7 @@ def formateo_eventos(cell, elemento, empresa):
             texto.add_run(elemento[empresa][n -3])
             texto.add_run("\nLinks: ").bold = True
             for l in elemento[empresa][n -1]:
-                texto.add_run("\n" + l)
+                texto.add_run("\n" + "https://www.bmv.com.mx" + l)
             texto.add_run("\n")
     elif len(elemento[empresa]) == 0:
         cell.add_paragraph("Sin publicaciones.")
@@ -251,11 +251,13 @@ if __name__ == "__main__":
         else:
             print("Favor de contestar solo 's' o 'n'.\n")
             exit()
-    elec_lista = input("Si no desea crear una lista de empresas escriba 'n': ")
-    if elec_lista == 'n':
+    elec_lista = input("¿Deséa crear una lista de empresas? (s/n): ")
+    if elec_lista == 's':
+        lista_empresas()
+    elif elec_lista == 'n':
         pass
     else:
-        lista_empresas()
+        print("Favor de solo responder: s/n.")
     titulo, subtitulo = titulo_y_sub()
     dec_EVREL = input("Desea añadir los links de eventos relevantes (s/n): ")
     if dec_EVREL.strip().lower() == "s":
@@ -269,7 +271,7 @@ if __name__ == "__main__":
     else:
         print("Favor de solo seleccionar (s / n).")
         exit()
-    dec_EV = input("¿Generar nuevo documento? (s/n): ")
+    dec_EVREL = input("¿Generar nuevo documento? (s/n): ")
     while True:
         if dec_EVREL.strip().lower() == "s":
             doc_creator(fecha, mes, titulo, subtitulo, new_dict)
