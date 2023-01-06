@@ -1,10 +1,3 @@
-#!/home/habib/environments/main_venv/bin/python3
-
-# Requests para descargar pagina de la BMV
-# bs4 para buscar dento de la página descargada
-# docx para crear el documento de word
-# datetime para obtener la fecha del día de hoy
-
 import requests
 from bs4 import BeautifulSoup
 from docx import Document
@@ -13,7 +6,6 @@ from datetime import date, datetime
 from extr_empresas import lista_empresas
 import xlrd
 from xlutils.copy import copy
-import xlwt
 
 meses = ['enero', 'febrero', 'marzo', 'abril', 
          'mayo', 'junio', 'julio', 'agosto', 
@@ -23,7 +15,6 @@ meses = ['enero', 'febrero', 'marzo', 'abril',
 def fecha_actual():
     return date.today()
 
-
 def fecha_elegida():
     print("¿De qué fecha desea extraer los eventos?\n")
     print("Ingrese la fecha con el formato: día-mes-año (ejem. 31-01-2000)")
@@ -31,7 +22,6 @@ def fecha_elegida():
     fecha_select = input("Fecha: ")
     return fecha_select
     
-
 def validar_fecha(fecha, meses):
     format = "%d-%m-%Y"
     se_fecha = fecha.strip()
@@ -153,9 +143,6 @@ def formateo_eventos(cell, elemento, empresa):
     else:
         cell.add_paragraph("Error, favor de verificar manualmente.")
 
-
-
-
 def loop_events(tables, number):
     busqueda = {}
     for event in tables[number].find_all("tr"):
@@ -190,9 +177,7 @@ def searcher(dict, fecha):
         for e in resultados:
             for i in e:
                 if i.split()[0] == fecha.strftime("%d-%m-%Y"):
-                    print("Eureka")
-                    print(i.split()[0])
-                    print(e[i])
+                    print(f"Evento encontrado de empresa: {empresa}.")
                     lista_word[-1][empresa].append(i)
                     lista_word[-1][empresa].extend(e[i])
     return lista_word
@@ -207,72 +192,56 @@ def checker_link_ER():
             print("Favor de utilizar la función para completarlos o hacerlo de forma manual.")
             exit()
 
-
-
-
-"""
-for i in range(1, 101):
-    print('Procesando empresa ' + str(i) + ' de 100')
-    fila = tabla.rows[i - 1].cells
-    fila[0].text = str(i)
-    if i <= len(entidades_solas):
-        fechas, asuntos, links, nombre = extraer_info(empresas_bmv[i -1])
-        fila[1].text = entidades_solas[i - 1]
-        fila[2].text = nombre
-        if len(fechas) == len(asuntos) and len(fechas) == len(links):
-            for f in range(len(fechas)):
-                if fechas[f][:10] == fecha_actual().strftime('%d-%m-%Y'):
-                    texto = fila[3].add_paragraph()
-                    texto.add_run('ASUNTO').bold = True
-                    texto.add_run('\n' + asuntos[f] + '\n')
-                    texto.add_run('EVENTO RELEVANTE').bold = True
-                    texto.add_run('\n' + 'https://www.bmv.com.mx' + links[f] + '\n')
-                elif fila[3].text == '' and f == (len(fechas) - 1):
-                    fila[3].text = 'Sin publicación'
+def confirmar():
+    while True:
+        decision = input("¿Confirmar lo ingresado? (s/n): ")
+        if decision == "s":
+            return True
+        elif decision == "n":
+            return False
         else:
-            print('ERROR!!!!!!!!!!')
-    else:
-        fila[1].text = 'A completar'
-        fila[2].text = 'A completar'
+            print("Favor de solo respoder con s/n.\n")
+            
 
-
-documento.save('prueba_bmx.docx')
-"""
 if __name__ == "__main__":
     print("Extractor de eventos relevantes de empresas de la BMV.\n\n")
     while True:
         elec_fecha = fecha_elegida()
         fecha, mes = validar_fecha(elec_fecha, meses)
-        proseguir = input("Confirma la fecha (s/n): ")
-        if proseguir == "s":
+        if confirmar():
             break
-        elif proseguir == "n":
-            continue
-        else:
-            print("Favor de contestar solo 's' o 'n'.\n")
-            exit()
-    elec_lista = input("¿Deséa crear una lista de empresas? (s/n): ")
-    if elec_lista == 's':
-        lista_empresas()
-    elif elec_lista == 'n':
-        pass
-    else:
-        print("Favor de solo responder: s/n.")
-    titulo, subtitulo = titulo_y_sub()
-    dec_EVREL = input("Desea añadir los links de eventos relevantes (s/n): ")
-    if dec_EVREL.strip().lower() == "s":
-        relv_adder()
-        new_dict = extractorXls()
-        resultados = searcher(new_dict, fecha)
-    elif dec_EVREL.strip().lower() == "n":
-        checker_link_ER()
-        new_dict = extractorXls()
-        resultados = searcher(new_dict, fecha)
-    else:
-        print("Favor de solo seleccionar (s / n).")
-        exit()
-    dec_EVREL = input("¿Generar nuevo documento? (s/n): ")
     while True:
+        elec_lista = input("¿Deséa crear una lista de empresas? (s/n): ")
+        if elec_lista == 's':
+            lista_empresas()
+            break
+        elif elec_lista == 'n':
+            break
+        else:
+            print("Favor de solo responder: s/n.\n")
+    while True:
+        titulo, subtitulo = titulo_y_sub()
+        if confirmar():
+            break
+    while True:
+        dec_EVREL = input("Desea añadir los links de eventos relevantes (s/n): ")
+        if dec_EVREL.strip().lower() == "s":
+            print("Añadiendo links, favor de esperar...")
+            relv_adder()
+            new_dict = extractorXls()
+            print("Procesando, favor de esperar...")
+            resultados = searcher(new_dict, fecha)
+            break
+        elif dec_EVREL.strip().lower() == "n":
+            checker_link_ER()
+            new_dict = extractorXls()
+            print("Procesando, favor de esperar...")
+            resultados = searcher(new_dict, fecha)
+            break
+        else:
+            print("Favor de solo responder s/n.\n")
+    while True:
+        dec_EVREL = input("¿Generar nuevo documento? (s/n): ")
         if dec_EVREL.strip().lower() == "s":
             doc_creator(fecha, mes, titulo, subtitulo, new_dict)
             doc_updater(resultados)
@@ -281,5 +250,5 @@ if __name__ == "__main__":
             doc_updater(resultados)
             break
         else:
-            print("Favor de solo responder s/n.")
+            print("Favor de solo responder s/n.\n")
 
