@@ -1,4 +1,4 @@
-# Extractor de eventos relevantes de empresas de la Bolsa Mexicana de Valores
+# Extractor de eventos relevantes de empresas de la Bolsa Mexicana de Valorwes
 
 ## En pocas palabras
 
@@ -36,7 +36,7 @@ revisión completa de todas las categorias y la totalidad de los eventos, razón
 
 ![resultados](./ss/resultados.png)
 
-- Generador de reporte: Una vez que haya encontrado los eventos relevantes genera un documento de word personalizado de acuerdo a las empresas del
+- Generador de reporte: Una vez que haya encontrado los eventos relevantes, genera un documento de word personalizado de acuerdo a las empresas del
 listado y agrega la información del título del evento, la fecha (con hora) y los links para acceder al documento completo.
 
 ![reporte](./ss/ejemp_reporte.png)
@@ -109,10 +109,10 @@ Se depligan las opciones dependiendo de la categoria elegida:
 
 Hay que tener cuidado en no elegir la opción de <b>listo</b> cuando se visualizan las opciones de una categoria, la opción <b>0</b> siempre es equivalente a no seleccionar
 ninguna opción, SIEMPRE hay que seleccionar <b>listo</b> solo desde los criterios principales (estos se actualizan conforme uno hace elecciones), si estos llegan a cambiar después
-de elegir una opción quiere decir que son incompatibles, esto no es un error sino que simplemente así es como funciona el código de la página de la BMV.
+de elegir una opción quiere decir que son incompatibles, esto no es un error, sino que simplemente así es como funciona el código de la página de la BMV.
 
 El programa arregla un error de programación de la BMV, ya que en algunas selecciones con criterios muy específicos la página nos devuelve un documento remarcando que hubo un error,
-esto los resolví construyendo un lista manualmente usando opciones que se despliegan en tiempo real, a pesar de que va a avisar del error, no hay que preocuparse puesto que el propio
+esto lo resolví construyendo un lista manualmente usando opciones que se despliegan en tiempo real, a pesar de que va a avisar del error, no hay que preocuparse puesto que el propio
 programa lo soluciona.
 
 Finalmente, hay que destacar que si ya se ha generado un reporte este solo se actualiza en la tabla, por lo que es más conveniente elegir generar un nuevo documento cuando desees
