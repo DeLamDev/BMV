@@ -44,7 +44,7 @@ listado y agrega la información del título del evento, la fecha (con hora) y l
 ## Aplicaciones
 
 Es un programa que puede servir tanto en ámbito financiero como en el jurídico, particularmente para el derecho bursatil, puesto que al hacer un seguimiento
-de ciertas empresas podemos mantener informados a los clientes de cualquier acontecimeinto que sea relevante para el manejo de su negocio en su caso para
+de ciertas empresas podemos mantener informados a los clientes de cualquier acontecimiento que sea relevante para el manejo de su negocio en su caso para
 utilizarlo como información que sea de utilidad para tomar decisiones de inversión.
 
 ## Instalación
@@ -70,7 +70,7 @@ Posteriormente debe acceder al directorio del programa:
 cd BMV
 ```
 
-Dentro del mismo directorio deel programa, ejecutar el siguiente comando:
+Dentro del mismo directorio del programa, ejecutar el siguiente comando:
 
 ```python
 pip install -r requirements.txt
@@ -120,4 +120,4 @@ cambiar el título, subtítulo y la fecha.
 
 ![titulo](./ss/titulo_y_sub.png)
 
-Como último recordatorios los reportes y el excel se guardan en el directorio desde el que se ejecuta el programa.
+Como último recordatorio, los reportes y el excel se guardan en el directorio desde el que se ejecuta el programa.
